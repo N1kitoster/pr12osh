@@ -1,18 +1,30 @@
 <?php
-	session_start();
 	include("./settings/connect_datebase.php");
 	
-	if (isset($_SESSION['user'])) {
-		if($_SESSION['user'] == -1) {
+	if (isset($_COOKIE['user_id']) && isset($_COOKIE['user_auth'])) {
+		$user_id = $_COOKIE['user_id'];
+		$auth_token = $_COOKIE['user_auth'];
+
+		if($auth_token !== md5(md5($user_id)) || $user_id == -1) {
 			header("Location: login.php");
+			exit();
 		} else {
-			// проверяем пользователя, если админ выкидываем на админа
-			$user_to_query = $mysqli->query("SELECT `roll` FROM `users` WHERE `id` = ".$_SESSION['user']);
+			
+			$user_to_query = $mysqli->query("SELECT `roll` FROM `users` WHERE `id` = " . intval($user_id));
 			$user_to_read = $user_to_query->fetch_row();
 			
-			if($user_to_read[0] == 1) header("Location: login.php");
+			if($user_to_read[0] == 1) {
+				header("Location: login.php");
+				exit();
+			}
 		}
- 	} else header("Location: login.php");
+ 	} else {
+		header("Location: login.php");
+		exit();
+	}
+	
+
+	$current_user_id = intval($_COOKIE['user_id']);
 	
 ?>
 <!DOCTYPE HTML>
@@ -44,7 +56,7 @@
 				<div class="name" style="padding-bottom: 0px;">Личный кабинет</div>
 				<div class="description">Добро пожаловать: 
 					<?php
-						$user_to_query = $mysqli->query("SELECT * FROM `users` WHERE `id` = ".$_SESSION['user']);
+						$user_to_query = $mysqli->query("SELECT * FROM `users` WHERE `id` = ".intval($_COOKIE['user_id']));
 						$user_to_read = $user_to_query->fetch_row();
 						
 						echo $user_to_read[1];

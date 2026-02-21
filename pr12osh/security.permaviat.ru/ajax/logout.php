@@ -1,4 +1,10 @@
 <?php
-	session_start();
-	session_destroy();
+	setcookie("user_auth", "", [
+		'expires' => time() - 3600,
+		'path' => '/'
+	]);
+	setcookie("user_id", "", [
+		'expires' => time() - 3600,
+		'path' => '/'
+	]);
 ?>
