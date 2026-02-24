@@ -20,13 +20,13 @@
 		setcookie("user_auth", $token, [
 			'expires' => time() + 3600,
 			'path' => '/',
-			'secure' => true,
+			'secure' => false,
 			'httponly' => true
 		]);
 			setcookie("user_id", $id, [
 			'expires' => time() + 3600,
 			'path' => '/',
-			'secure' => true,
+			'secure' => false,
 			'httponly' => true
 		]);
 		

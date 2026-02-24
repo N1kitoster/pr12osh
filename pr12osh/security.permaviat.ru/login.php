@@ -10,7 +10,7 @@
 			if($user_read = $user_query->fetch_row()) {
 				if($user_read[3] == 0) header("Location: user.php");
 				else if($user_read[3] == 1) header("Location: admin.php");
-				exit();
+				exit;
 			}
 		}
  	}

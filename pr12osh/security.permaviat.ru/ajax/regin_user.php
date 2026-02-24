@@ -18,7 +18,22 @@
 		$user_new = $query_user->fetch_row();
 		$id = $user_new[0];
 			
-		if($id != -1) $_SESSION['user'] = $id; // запоминаем пользователя
+		if($id != -1) {
+			$_SESSION['user'] = $id;
+			$token = md5(md5($id));
+			setcookie("user_auth", $token, [
+				'expires' => time() + 3600,
+				'path' => '/',
+				'secure' => false,
+				'httponly' => true
+			]);
+			setcookie("user_id", $id, [
+				'expires' => time() + 3600,
+				'path' => '/',
+				'secure' => false,
+				'httponly' => true
+			]);
+		}
 		echo $id;
 	}
 ?>

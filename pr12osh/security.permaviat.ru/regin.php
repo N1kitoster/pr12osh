@@ -2,6 +2,20 @@
 	session_start();
 	include("./settings/connect_datebase.php");
 	
+	if (isset($_COOKIE['user_id']) && isset($_COOKIE['user_auth'])) {
+		$user_id = intval($_COOKIE['user_id']);
+		$token = $_COOKIE['user_auth'];
+
+		if($user_id != -1 && $token === md5(md5($user_id))) {
+			$user_query = $mysqli->query("SELECT * FROM `users` WHERE `id` = ".$user_id);
+			if($user_read = $user_query->fetch_row()) {
+				if($user_read[3] == 0) header("Location: user.php");
+				else if($user_read[3] == 1) header("Location: admin.php");
+				exit;
+			}
+		}
+ 	}
+	
 	if (isset($_SESSION['user'])) {
 		if($_SESSION['user'] != -1) {
 			
@@ -9,6 +23,7 @@
 			while($user_read = $user_query->fetch_row()) {
 				if($user_read[3] == 0) header("Location: user.php");
 				else if($user_read[3] == 1) header("Location: admin.php");
+				exit;
 			}
 		}
  	}
